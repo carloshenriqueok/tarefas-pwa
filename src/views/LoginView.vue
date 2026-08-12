@@ -1,7 +1,7 @@
 <template>
   <div class="login-container">
     <form class="login-form" @submit.prevent="handleLogin">
-      <h1>Entrar</h1>
+      <h1>ENTRAR</h1>
 
       <div v-if="errorMessage" class="error-message">{{ errorMessage }}</div>
 
@@ -29,6 +29,8 @@
         />
       </div>
 
+      <router-link to="/register">Não tem uma conta? Registre-se</router-link>
+
       <button type="submit" :disabled="loading">
         {{ loading ? 'Entrando...' : 'Entrar' }}
       </button>
@@ -38,16 +40,21 @@
 
 <script setup>
 import { ref } from 'vue';
-import { useRouter } from 'vue-router';
+import { useRouter, useRoute } from 'vue-router';
 import { useAuthStore } from '@/stores/auth';
 
 const router = useRouter();
+const route = useRoute();
 const authStore = useAuthStore();
 
 const email = ref('');
 const password = ref('');
 const loading = ref(false);
 const errorMessage = ref('');
+
+if (route.query.registered === 'true') {
+  errorMessage.value = 'Registro realizado com sucesso. Por favor, entre com suas credenciais.';
+}
 
 async function handleLogin() {
   loading.value = true;
@@ -64,3 +71,56 @@ async function handleLogin() {
   }
 }
 </script>
+
+<style scoped>
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  & h1 {
+    margin-bottom: 1rem;
+    font-size: 2rem;
+    text-align: center;
+
+  }
+}
+
+.login-form {
+  & label {
+    display: block;
+    margin: 0.5rem 0;
+    font-weight: 600;
+  }
+
+  & input {
+    width: 100%;
+    padding: 0.5rem;
+    margin-bottom: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+
+  & button {
+    width: 100%;
+    padding: 0.75rem;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 1rem;
+
+    &:disabled {
+      background-color: #6c757d;
+      cursor: not-allowed;
+    }
+  }
+}
+
+a {
+  color: #007bff;
+  text-decoration: none;
+}
+
+</style>

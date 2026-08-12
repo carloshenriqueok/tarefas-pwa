@@ -30,6 +30,10 @@ export const useAuthStore = defineStore('auth', () => {
     }
   }
 
+  async function register(email, password) {
+    const { data } = await authApi.register(email, password)
+  }
+
   async function logout() {
     await unsubscribe() //
     accessToken.value = null
@@ -38,5 +42,5 @@ export const useAuthStore = defineStore('auth', () => {
     localStorage.removeItem('refresh_token')
   }
 
-  return { accessToken, refreshToken, isAuthenticated, login, logout, requestPermission, subscribe }
+  return { accessToken, refreshToken, isAuthenticated, login, logout, requestPermission, subscribe, register }
 })
